@@ -230,26 +230,71 @@ class StudyList extends Component {
             ? 'studylistStudy noselect active'
             : 'studylistStudy noselect'
         }
-        onMouseDown={event => {
+      >
+        <td className={study.patientName ? 'patientName' : 'emptyCell'} onMouseDown={event => {
           // middle/wheel click
           if (event.button === 1) {
             this.props.onSelectItem(study.studyInstanceUid);
           }
         }}
-        onClick={() => {
-          this.onHighlightItem(study.studyInstanceUid);
-          this.props.onSelectItem(study.studyInstanceUid);
-        }}
-      >
-        <td className={study.patientName ? 'patientName' : 'emptyCell'}>
+            onClick={() => {
+              this.onHighlightItem(study.studyInstanceUid);
+              this.props.onSelectItem(study.studyInstanceUid);
+            }}>
           {study.patientName || `(${this.props.t('Empty')})`}
         </td>
 
-        <td className="patientId">{study.patientId}</td>
-        <td className="accessionNumber">{study.accessionNumber}</td>
-        <td className="studyDate">{study.studyDate}</td>
-        <td className="modalities">{study.modalities}</td>
-        <td className="studyDescription">{study.studyDescription}</td>
+        <td className="patientId" onMouseDown={event => {
+          // middle/wheel click
+          if (event.button === 1) {
+            this.props.onSelectItem(study.studyInstanceUid);
+          }
+        }}
+            onClick={() => {
+              this.onHighlightItem(study.studyInstanceUid);
+              this.props.onSelectItem(study.studyInstanceUid);
+            }}>{study.patientId}</td>
+        <td className="accessionNumber" onMouseDown={event => {
+          // middle/wheel click
+          if (event.button === 1) {
+            this.props.onSelectItem(study.studyInstanceUid);
+          }
+        }}
+            onClick={() => {
+              this.onHighlightItem(study.studyInstanceUid);
+              this.props.onSelectItem(study.studyInstanceUid);
+            }}>{study.accessionNumber}</td>
+        <td className="studyDate" onMouseDown={event => {
+          // middle/wheel click
+          if (event.button === 1) {
+            this.props.onSelectItem(study.studyInstanceUid);
+          }
+        }}
+            onClick={() => {
+              this.onHighlightItem(study.studyInstanceUid);
+              this.props.onSelectItem(study.studyInstanceUid);
+            }}>{study.studyDate}</td>
+        <td className="modalities" onMouseDown={event => {
+          // middle/wheel click
+          if (event.button === 1) {
+            this.props.onSelectItem(study.studyInstanceUid);
+          }
+        }}
+            onClick={() => {
+              this.onHighlightItem(study.studyInstanceUid);
+              this.props.onSelectItem(study.studyInstanceUid);
+            }}>{study.modalities}</td>
+        <td className="studyDescription" onMouseDown={event => {
+          // middle/wheel click
+          if (event.button === 1) {
+            this.props.onSelectItem(study.studyInstanceUid);
+          }
+        }}
+            onClick={() => {
+              this.onHighlightItem(study.studyInstanceUid);
+              this.props.onSelectItem(study.studyInstanceUid);
+            }}>{study.studyDescription}</td>
+        <td className="studyNotes"><button onClick={($event)=>{$event.preventDefault(); console.log('it Worked')}}>Add notes</button></td>
       </tr>
     );
   }
@@ -281,6 +326,11 @@ class StudyList extends Component {
         displayText: this.props.t('StudyDescription'),
         sort: 0,
       },
+      studyNotes: {
+        displayText: this.props.t('StudyNotes'),
+        inputType: 'some-random-type',
+        sort: 0,
+      }
     };
 
     // Apply sort
