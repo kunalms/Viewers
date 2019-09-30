@@ -12,6 +12,7 @@ import { isInclusivelyBeforeDay } from 'react-dates';
 import moment from 'moment';
 import debounce from 'lodash.debounce';
 import { withTranslation } from '../../utils/LanguageProvider';
+import Modal from 'react-bootstrap-modal';
 
 const today = moment();
 const lastWeek = moment().subtract(7, 'day');
@@ -90,6 +91,8 @@ class StudyList extends Component {
         studyDateTo: this.defaultEndDate,
       },
       highlightedItem: '',
+      show: false,
+      modalStudy: undefined
     };
 
     this.getChangeHandler = this.getChangeHandler.bind(this);
@@ -221,7 +224,24 @@ class StudyList extends Component {
     this.setState({ highlightedItem: studyItemUid });
   }
 
+    openModalWithStudy = (currStudy) => {
+        this.setState({
+            show: true,
+            modalStudy :{
+                studyInstanceUid: currStudy.studyInstanceUid,
+                patientName: currStudy.patientName,
+                notes: currStudy.studyInstanceUid
+                // notes: study.notes
+            }
+        });
+    };
+
+    handleClose = () => {
+        this.setState(({show: false, modalStudy: undefined}));
+    };
+
   renderTableRow(study) {
+
     return (
       <tr
         key={study.studyInstanceUid}
@@ -294,7 +314,9 @@ class StudyList extends Component {
               this.onHighlightItem(study.studyInstanceUid);
               this.props.onSelectItem(study.studyInstanceUid);
             }}>{study.studyDescription}</td>
-        <td className="studyNotes"><button onClick={($event)=>{$event.preventDefault(); console.log('it Worked')}}>Add notes</button></td>
+        <td className="studyNotes">
+            <button onClick={()=> this.openModalWithStudy(study)}>Add notes</button>
+        </td>
       </tr>
     );
   }
@@ -458,6 +480,27 @@ class StudyList extends Component {
           {this.renderIsLoading()}
           {this.renderHasError()}
           {this.renderNoMachingResults()}
+
+            {this.state.modalStudy ? (<Modal show={this.state.show} onHide={this.handleClose} onEnter={console.log(this.state)}
+                                             backdrop={false}
+                                             large={false}
+                                             keyboard={false}>
+                <Modal.Header closeButton >
+                    <Modal.Title>Enter notes for: {this.state.modalStudy.patientName || `(${this.props.t('Empty')})`}</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <input type="text" value={this.state.modalStudy.notes}/>
+                </Modal.Body>
+                <Modal.Footer>
+                    <button variant="secondary" onClick={this.handleClose}>
+                        Close
+                    </button>
+                    <button variant="primary" onClick={this.handleClose}>
+                        Save Changes
+                    </button>
+                </Modal.Footer>
+            </Modal>): null}
+
 
           <PaginationArea
             pageOptions={this.props.pageOptions}
