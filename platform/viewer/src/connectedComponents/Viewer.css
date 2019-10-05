@@ -1,5 +1,5 @@
 #viewer {
-  background-color: black;
+  background-color: var(--ui-gray-darkest);
   width: 100%;
 }
 

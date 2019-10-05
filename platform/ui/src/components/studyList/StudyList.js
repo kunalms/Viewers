@@ -1,17 +1,17 @@
 import './StudyList.styl';
 
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 
 import CustomDateRangePicker from './CustomDateRangePicker.js';
-import { Icon } from './../../elements/Icon';
-import { PaginationArea } from './PaginationArea.js';
+import {Icon} from './../../elements/Icon';
+import {PaginationArea} from './PaginationArea.js';
 import PropTypes from 'prop-types';
-import { StudyListLoadingText } from './StudyListLoadingText.js';
-import { StudylistToolbar } from './StudyListToolbar.js';
-import { isInclusivelyBeforeDay } from 'react-dates';
+import {StudyListLoadingText} from './StudyListLoadingText.js';
+import {StudylistToolbar} from './StudyListToolbar.js';
+import {isInclusivelyBeforeDay} from 'react-dates';
 import moment from 'moment';
 import debounce from 'lodash.debounce';
-import { withTranslation } from '../../utils/LanguageProvider';
+import {withTranslation} from '../../utils/LanguageProvider';
 import Modal from 'react-bootstrap-modal';
 
 const today = moment();
@@ -236,9 +236,17 @@ class StudyList extends Component {
         });
     };
 
-    handleClose = () => {
-        this.setState(({show: false, modalStudy: undefined}));
-    };
+  handleClose = () => {
+    this.setState(({ show: false, modalStudy: undefined }));
+  };
+
+  updateNotes = (e) => {
+    this.setState({
+      modalStudy: {
+        notes: e.target.value
+      }
+    });
+  };
 
   renderTableRow(study) {
 
@@ -489,7 +497,7 @@ class StudyList extends Component {
                     <Modal.Title>Enter notes for: {this.state.modalStudy.patientName || `(${this.props.t('Empty')})`}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <input type="text" value={this.state.modalStudy.notes}/>
+                    <textarea name="notes-textarea" rows={10} cols={76} value={this.state.modalStudy.notes} onChange={(e)=>{this.updateNotes(e)}}/>
                 </Modal.Body>
                 <Modal.Footer>
                     <button variant="secondary" onClick={this.handleClose}>

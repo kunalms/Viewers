@@ -1,7 +1,7 @@
 @import './../../design/styles/common/form.styl'
 @import './../../design/styles/common/global.styl'
 
-$study-list-padding = 2%;
+$study-list-padding = 4%;
 $study-list-toolbar-height = 75px;
 $body-cell-height = 40px;
 
@@ -173,10 +173,10 @@ placeholder-color(c)
     > tbody
       tr
         padding: 5px
-        background-color: black
+        background-color: var(--ui-gray-darker)
 
         &:nth-child(even)
-          background-color: var(--ui-gray-darker)
+          background-color: var(--ui-gray-darkest)
 
         td
           padding: 8px;

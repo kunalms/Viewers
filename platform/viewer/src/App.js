@@ -1,35 +1,25 @@
-import { hot } from 'react-hot-loader/root';
+import {hot} from 'react-hot-loader/root';
 
 import './config';
 
-import {
-  CommandsManager,
-  ExtensionManager,
-  HotkeysManager,
-  utils,
-} from '@ohif/core';
-import React, { Component } from 'react';
-import {
-  getUserManagerForOpenIdConnectClient,
-  initWebWorkers,
-} from './utils/index.js';
+import {CommandsManager, ExtensionManager, HotkeysManager, utils,} from '@ohif/core';
+import React, {Component} from 'react';
+import {getUserManagerForOpenIdConnectClient, initWebWorkers,} from './utils/index.js';
 
-import { I18nextProvider } from 'react-i18next';
+import {I18nextProvider} from 'react-i18next';
 import initCornerstoneTools from './initCornerstoneTools.js';
-
 // ~~ EXTENSIONS
-import { GenericViewerCommands, MeasurementsPanel } from './appExtensions';
+import {GenericViewerCommands, MeasurementsPanel} from './appExtensions';
 import OHIFCornerstoneExtension from '@ohif/extension-cornerstone';
 import OHIFStandaloneViewer from './OHIFStandaloneViewer';
-import { OidcProvider } from 'redux-oidc';
+import {OidcProvider} from 'redux-oidc';
 import PropTypes from 'prop-types';
-import { Provider } from 'react-redux';
-import { BrowserRouter as Router } from 'react-router-dom';
-import { getActiveContexts } from './store/layout/selectors.js';
+import {Provider} from 'react-redux';
+import {BrowserRouter as Router} from 'react-router-dom';
+import {getActiveContexts} from './store/layout/selectors.js';
 import i18n from '@ohif/i18n';
 import setupTools from './setupTools.js';
 import store from './store';
-
 // Contexts
 import WhiteLabellingContext from './context/WhiteLabellingContext';
 import UserManagerContext from './context/UserManagerContext';
@@ -71,8 +61,30 @@ class App extends Component {
     ),
   };
 
+  static RadicalImagingLogo = () => {
+    return React.createElement(
+      'div',
+        {},
+        React.createElement('a',
+        {
+          target: '_blank',
+          rel: 'noopener noreferrer',
+          className: 'header-brand',
+          href: 'http://google.com',
+        },
+        [React.createElement('img', {
+              src: 'https://drive.google.com/uc?id=1oeLUzfs3W7DywvYLPDJKdEIo2kmBkwmc&export=download',
+              alt: 'Rainbow logo'
+            }),
+            React.createElement('h1', {}, 'Rainbow')])
+
+    );
+  };
+
   static defaultProps = {
-    whiteLabelling: {},
+    whiteLabelling: {
+      logoComponent: this.RadicalImagingLogo()
+    },
     oidc: [],
     extensions: [],
   };
@@ -169,9 +181,6 @@ class App extends Component {
   }
 }
 
-/**
- * @param
- */
 function _initExtensions(extensions, hotkeys) {
   const defaultExtensions = [
     GenericViewerCommands,
