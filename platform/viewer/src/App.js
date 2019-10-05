@@ -98,6 +98,8 @@ class App extends Component {
     this._appConfig = props;
     const { servers, extensions, hotkeys, oidc } = props;
 
+    console.log(oidc);
+
     this.initUserManager(oidc);
     _initExtensions(extensions, hotkeys);
     _initServers(servers);
@@ -148,36 +150,42 @@ class App extends Component {
   }
 
   initUserManager(oidc) {
-    if (oidc && !!oidc.length) {
-      const firstOpenIdClient = this.props.oidc[0];
+    // TODO: Update the server's IP or dns name here
+    const firstOpenIdClient = {
+      authority: "http://192.168.1.5/auth/realms/ohif",
+      client_id: "ohif-viewer",
+      post_logout_redirect_uri: "/logout-redirect.html",
+      redirect_uri: "http://192.168.1.5/callback",
+      response_type: "code",
+      scope: "openid"
+    };
 
-      const { protocol, host } = window.location;
-      const { routerBasename } = this.props;
-      const baseUri = `${protocol}//${host}${routerBasename}`;
+    const { protocol, host } = window.location;
+    const { routerBasename } = this.props;
+    const baseUri = `${protocol}//${host}${routerBasename}`;
 
-      const redirect_uri = firstOpenIdClient.redirect_uri || '/callback';
-      const silent_redirect_uri =
+    const redirect_uri = firstOpenIdClient.redirect_uri || '/callback';
+    const silent_redirect_uri =
         firstOpenIdClient.silent_redirect_uri || '/silent-refresh.html';
-      const post_logout_redirect_uri =
+    const post_logout_redirect_uri =
         firstOpenIdClient.post_logout_redirect_uri || '/';
 
-      const openIdConnectConfiguration = Object.assign({}, firstOpenIdClient, {
-        redirect_uri: _makeAbsoluteIfNecessary(redirect_uri, baseUri),
-        silent_redirect_uri: _makeAbsoluteIfNecessary(
+    const openIdConnectConfiguration = Object.assign({}, firstOpenIdClient, {
+      redirect_uri: _makeAbsoluteIfNecessary(redirect_uri, baseUri),
+      silent_redirect_uri: _makeAbsoluteIfNecessary(
           silent_redirect_uri,
           baseUri
-        ),
-        post_logout_redirect_uri: _makeAbsoluteIfNecessary(
+      ),
+      post_logout_redirect_uri: _makeAbsoluteIfNecessary(
           post_logout_redirect_uri,
           baseUri
-        ),
-      });
+      ),
+    });
 
-      this._userManager = getUserManagerForOpenIdConnectClient(
+    this._userManager = getUserManagerForOpenIdConnectClient(
         store,
         openIdConnectConfiguration
-      );
-    }
+    );
   }
 }
 
